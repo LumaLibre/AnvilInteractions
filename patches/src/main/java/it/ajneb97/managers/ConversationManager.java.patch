@@ -1,0 +1,31 @@
+diff --git a/src/main/java/it/ajneb97/managers/ConversationManager.java b/src/main/java/it/ajneb97/managers/ConversationManager.java
+index dd04f92..25a789e 100644
+--- a/src/main/java/it/ajneb97/managers/ConversationManager.java
++++ b/src/main/java/it/ajneb97/managers/ConversationManager.java
+@@ -257,7 +257,7 @@ public class ConversationManager {
+    }
+ 
+    public void sendDialogueMessage(Player var1, Dialogue var2, FileConfiguration var3, MessagesManager var4, PlayerConversation var5) {
+-      ArrayList var6 = new ArrayList<>(var2.getText());
++      ArrayList<String> var6 = new ArrayList<>(var2.getText()); // Luma - decompile
+       MainConfigManager var7 = this.plugin.getConfigsManager().getMainConfigManager();
+       if (var7.isUseEmptySpaces()) {
+          var4.sendMessage(var1, " ", false);
+@@ -409,7 +409,7 @@ public class ConversationManager {
+ 
+    public boolean executeConditionalDialogue(PlayerConversation var1) {
+       Dialogue var2 = var1.getCurrentDialogue();
+-      List var3 = var2.getConditionalDialogues();
++      List<ConditionalDialogue> var3 = var2.getConditionalDialogues(); // Luma - decompile
+       ConditionsManager var4 = this.plugin.getConditionsManager();
+       boolean var5 = this.plugin.getDependencyManager().isPlaceholderAPI();
+       if (!var3.isEmpty()) {
+@@ -674,7 +674,7 @@ public class ConversationManager {
+          }
+ 
+          var20.sendMessage(var1, var21.getString("conversationEnded"), false);
+-         ArrayList var12 = new ArrayList<>(var4.getHiddenMessages());
++         ArrayList<BlockedMessage> var12 = new ArrayList<>(var4.getHiddenMessages()); // Luma - decompile
+          var3.removePlayer(var1);
+          if (var7.isSendBackHiddenChat()) {
+             for (BlockedMessage var14 : var12) {

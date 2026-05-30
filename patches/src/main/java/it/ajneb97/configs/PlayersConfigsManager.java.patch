@@ -1,0 +1,26 @@
+diff --git a/src/main/java/it/ajneb97/configs/PlayersConfigsManager.java b/src/main/java/it/ajneb97/configs/PlayersConfigsManager.java
+index f390a1c..c9cd5a6 100644
+--- a/src/main/java/it/ajneb97/configs/PlayersConfigsManager.java
++++ b/src/main/java/it/ajneb97/configs/PlayersConfigsManager.java
+@@ -71,8 +71,10 @@ public class PlayersConfigsManager extends DataFolderConfigManager {
+       var4.set("saved_dialogues", var1.getSavedDialogues());
+       var4.set("in_conversation", var1.getInConversation());
+       var4.set("cooldowns", var1.getCooldowns());
+-      List var5 = var1.getInfluence();
+-      ArrayList var6 = new ArrayList();
++      // Luma start - decompile
++      List<ConversationEntityInfluence> var5 = var1.getInfluence();
++      ArrayList<String> var6 = new ArrayList();
++      // Luma end - decompile
+ 
+       for (ConversationEntityInfluence var8 : var5) {
+          var6.add(var8.getConversationEntity() + ";" + var8.getInfluence());
+@@ -84,7 +86,7 @@ public class PlayersConfigsManager extends DataFolderConfigManager {
+ 
+    @Override
+    public void saveConfigs() {
+-      Map var1 = this.plugin.getPlayerDataManager().getPlayers();
++      Map<UUID, PlayerData> var1 = this.plugin.getPlayerDataManager().getPlayers(); // Luma - decompile
+ 
+       for (Entry var3 : var1.entrySet()) {
+          PlayerData var4 = (PlayerData)var3.getValue();

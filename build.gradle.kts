@@ -6,27 +6,53 @@ import javax.inject.Inject
 import org.gradle.process.ExecOperations
 
 plugins {
-    id("java-library")
+    id("java")
     id("com.gradleup.shadow") version "9.3.1"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.21"
 }
 
-// TODO: Configure
-group = "dev.lumas.templates"
-version = "0.0.0"
+group = "it.ajneb97"
+version = "2.18.2"
 
 repositories {
-    // TODO: Configure
+    mavenCentral()
+    maven("https://hub.spigotmc.org/nexus/content/repositories/snapshots/")
+    maven("https://repo.papermc.io/repository/maven-public/")
+    maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
+    maven("https://repo.citizensnpcs.co/")
+    maven("https://repo.dmulloy2.net/repository/public/")
+    maven("https://repo.codemc.io/repository/maven-public/")
+    maven("https://jitpack.io")
+    maven("https://libraries.minecraft.net/")
+    maven("https://repo.fancyinnovations.com/releases")
+    //maven("https://repo.fancyplugins.de/releases")
 }
 
 dependencies {
-    // TODO: Configure
+    // this came from pom.xml inside jar manifest, but just paperweight covers these two
+    //compileOnly("io.papermc.paper:paper-api:1.21.11-R0.1-SNAPSHOT")
+    //compileOnly("org.spigotmc:spigot:26.1-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("26.1.2.build.+")
+    compileOnly("com.mojang:authlib:1.5.25")
+    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT") {
+        isTransitive = false
+    }
+    compileOnly("net.dmulloy2:ProtocolLib:5.4.0")
+    compileOnly("com.github.decentsoftware-eu:decentholograms:2.8.1")
+    compileOnly("com.gmail.filoghost.holographicdisplays:holographicdisplays-api:2.4.9")
+    // repo down rn :(
+    //compileOnly("de.oliver:FancyNpcs:2.5.2")
+    //compileOnly("de.oliver:FancyHolograms:2.4.2")
+    compileOnly(files("sources/FancyNpcs-2.10.0.362.jar"))
+    compileOnly(files("sources/FancyHolograms-2.10.0.190.jar"))
 }
 
-// TODO: Configure
+
 tasks {
     shadowJar {
         archiveClassifier.set("")
-        archiveBaseName.set(rootProject.name)
+        archiveBaseName.set("Interactions")
 
         manifest {
             attributes(
@@ -45,20 +71,21 @@ tasks {
     }
 }
 
-// TODO: Configure
 java {
-    toolchain.languageVersion.set(JavaLanguageVersion.of(21))
+    toolchain.languageVersion.set(JavaLanguageVersion.of(25))
 }
 
-// TODO: Configure
 val decompileConfig = DecompileConfig(
-    inputJar = "sources/Template.jar",
+    inputJar = "sources/Interactions-2.18.2.jar",
     vineflowerVersion = "1.12.0",
     packageMappings = mapOf(
-        "dev/lumas/templates" to "."
+        "it/ajneb97" to "."
     ),
     resourceMappings = mapOf(
-        "plugin.yml" to "."
+        "plugin.yml" to ".",
+        "config.yml" to ".",
+        "messages.yml" to ".",
+        "conversations" to "."
     )
 )
 
@@ -889,7 +916,7 @@ tasks.register("resetSources") {
     tasks.named("applyPatches").get().mustRunAfter("cleanDistributedSources")
 }
 
-tasks.register<Delete>("cleanCache") {
+tasks.register<Delete>("cleanPatchCache") {
     group = "build"
     description = "Delete ephemeral patch working directories."
     delete(patchWorkDir, rejectsDir)

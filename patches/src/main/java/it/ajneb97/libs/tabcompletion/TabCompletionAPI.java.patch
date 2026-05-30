@@ -1,0 +1,13 @@
+diff --git a/src/main/java/it/ajneb97/libs/tabcompletion/TabCompletionAPI.java b/src/main/java/it/ajneb97/libs/tabcompletion/TabCompletionAPI.java
+index 6197fb9..c6c3b93 100644
+--- a/src/main/java/it/ajneb97/libs/tabcompletion/TabCompletionAPI.java
++++ b/src/main/java/it/ajneb97/libs/tabcompletion/TabCompletionAPI.java
+@@ -68,7 +68,7 @@ public class TabCompletionAPI {
+ 
+    public List<String> getPossibleCompletionsFromSubCommand(String var1, SubCommand var2, int var3) {
+       ArrayList var4 = new ArrayList();
+-      List var5 = var2.getCompletions(var3);
++      List<String> var5 = var2.getCompletions(var3); // Luma - decompile
+       if (var5 == null) {
+          return var4;
+       }

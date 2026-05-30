@@ -1,0 +1,13 @@
+diff --git a/src/main/java/it/ajneb97/managers/inventory/EditConversationInventoryManager.java b/src/main/java/it/ajneb97/managers/inventory/EditConversationInventoryManager.java
+index 26610af..12fcfb4 100644
+--- a/src/main/java/it/ajneb97/managers/inventory/EditConversationInventoryManager.java
++++ b/src/main/java/it/ajneb97/managers/inventory/EditConversationInventoryManager.java
+@@ -126,7 +126,7 @@ public class EditConversationInventoryManager {
+       for (int var18 = 0; var18 < var49.size(); var18++) {
+          Dialogue var19 = (Dialogue)var49.get(var18);
+          String var20 = var19.getName();
+-         List var21 = var19.getText();
++         List<String> var21 = var19.getText(); // Luma - decompile
+          int var22 = var19.getActions().size() + var19.getLastActions().size();
+          String var23 = var19.getStartConversation();
+          String var24 = var19.getStartOptions();

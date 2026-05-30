@@ -1,0 +1,13 @@
+diff --git a/src/main/java/it/ajneb97/managers/VerifyManager.java b/src/main/java/it/ajneb97/managers/VerifyManager.java
+index 94ddddd..bc18c54 100644
+--- a/src/main/java/it/ajneb97/managers/VerifyManager.java
++++ b/src/main/java/it/ajneb97/managers/VerifyManager.java
+@@ -74,7 +74,7 @@ public class VerifyManager {
+    }
+ 
+    public void verifyConversations(ConversationEntity var1) {
+-      List var2 = var1.getConversations();
++      List<Conversation> var2 = var1.getConversations(); // Luma - decompile
+       if (var2.isEmpty()) {
+          ConversationError var3 = new ConversationError(ConversationErrorType.ENTITY_CONVERSATION_NO_CONVERSATIONS, true)
+             .setConversationEntityName(var1.getFileName());

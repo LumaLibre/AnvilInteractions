@@ -1,0 +1,22 @@
+diff --git a/src/main/java/it/ajneb97/managers/inventory/EditActionsInventoryManager.java b/src/main/java/it/ajneb97/managers/inventory/EditActionsInventoryManager.java
+index 72e0977..b6940d5 100644
+--- a/src/main/java/it/ajneb97/managers/inventory/EditActionsInventoryManager.java
++++ b/src/main/java/it/ajneb97/managers/inventory/EditActionsInventoryManager.java
+@@ -99,7 +99,7 @@ public class EditActionsInventoryManager {
+ 
+    public void clickAddAction(InventoryPlayer var1, FileConfiguration var2, MessagesManager var3) {
+       Player var4 = var1.getPlayer();
+-      Object var5 = null;
++      List<String> var5 = null; // Luma - decompile
+       InventoryPlayerActionData.ActionWhere var6 = var1.getActionData().getActionWhere();
+       if (var6.equals(InventoryPlayerActionData.ActionWhere.DIALOGUE)) {
+          var5 = var2.getStringList("inventoryAddActionChat");
+@@ -147,7 +147,7 @@ public class EditActionsInventoryManager {
+ 
+    public void clickEditAction(InventoryPlayer var1, FileConfiguration var2, MessagesManager var3, int var4) {
+       Player var5 = var1.getPlayer();
+-      Object var6 = null;
++      List<String> var6 = null; // Luma - decompile
+       InventoryPlayerActionData.ActionWhere var7 = var1.getActionData().getActionWhere();
+       if (var7.equals(InventoryPlayerActionData.ActionWhere.DIALOGUE)) {
+          var6 = var2.getStringList("inventoryAddActionChat");

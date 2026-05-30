@@ -1,0 +1,13 @@
+diff --git a/src/main/java/it/ajneb97/managers/inventory/EditInventoryManager.java b/src/main/java/it/ajneb97/managers/inventory/EditInventoryManager.java
+index 39eefd1..6dead4b 100644
+--- a/src/main/java/it/ajneb97/managers/inventory/EditInventoryManager.java
++++ b/src/main/java/it/ajneb97/managers/inventory/EditInventoryManager.java
+@@ -98,7 +98,7 @@ public class EditInventoryManager {
+          .ready();
+       new InventoryItem(var3, 46, Material.NAME_TAG).name(var2.getString("mainInventoryConfigName").replace("%name%", var1.getConversationEntity())).ready();
+       ConversationEntity var17 = this.plugin.getConversationManager().getConversationEntityByName(var1.getConversationEntity());
+-      List var6 = var17.getConversations();
++      List<Conversation> var6 = var17.getConversations(); // Luma - decompile
+       int var7 = 0;
+ 
+       for (Conversation var9 : var6) {

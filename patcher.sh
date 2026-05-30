@@ -28,7 +28,7 @@ case "$1" in
         echo "This wipes module sources + the decompiled base and rebuilds from scratch."
         read -p "Continue? [y/N] " confirm
         if [[ "$confirm" =~ ^[Yy]$ ]]; then
-            $GRADLE cleanDistributedSources cleanGenerated cleanCache
+            $GRADLE cleanDistributedSources cleanGenerated cleanPatchCache
             $GRADLE setup
             echo "Finished!"
         fi
@@ -87,8 +87,8 @@ case "$1" in
         case $choice in
             1) $GRADLE cleanDistributedSources ;;
             2) $GRADLE cleanGenerated ;;
-            3) $GRADLE cleanCache ;;
-            4) $GRADLE cleanDistributedSources cleanGenerated cleanCache ;;
+            3) $GRADLE cleanPatchCache ;;
+            4) $GRADLE cleanDistributedSources cleanGenerated cleanPatchCache ;;
         esac
         ;;
 

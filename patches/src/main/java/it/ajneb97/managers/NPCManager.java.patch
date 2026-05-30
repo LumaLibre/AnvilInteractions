@@ -1,0 +1,22 @@
+diff --git a/src/main/java/it/ajneb97/managers/NPCManager.java b/src/main/java/it/ajneb97/managers/NPCManager.java
+index 937351a..9f81079 100644
+--- a/src/main/java/it/ajneb97/managers/NPCManager.java
++++ b/src/main/java/it/ajneb97/managers/NPCManager.java
+@@ -159,7 +159,7 @@ public class NPCManager {
+       final Collection var5 = var1.getWorld().getNearbyEntities(var1, var4, 5.0, var4);
+       (new BukkitRunnable() {
+          public void run() {
+-            ArrayList var1x = NPCManager.this.getNearbyPossibleNPCs(var1, var4, var5);
++            ArrayList<ConversationNPC> var1x = NPCManager.this.getNearbyPossibleNPCs(var1, var4, var5); // Luma - decompile
+             NearConversationEntity var2x = null;
+ 
+             for (ConversationNPC var4x : var1x) {
+@@ -183,7 +183,7 @@ public class NPCManager {
+    public ConversationNPC getPossibleConversationNPCFromView(Player var1) {
+       DependencyManager var2 = this.plugin.getDependencyManager();
+       if (var2.isFancyNpcs()) {
+-         List var3 = OtherUtils.getLocationsInFront(var1, 4.0, 6);
++         List<Location> var3 = OtherUtils.getLocationsInFront(var1, 4.0, 6); // Luma - decompile
+ 
+          for (Npc var6 : FancyNpcsPlugin.get().getNpcManager().getAllNpcs()) {
+             Location var7 = var6.getData().getLocation();
