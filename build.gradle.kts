@@ -723,6 +723,7 @@ tasks.register("rebuildFilePatches") {
                 !patchFile.exists() -> {
                     patchFile.parentFile.mkdirs()
                     tmp.copyTo(patchFile, overwrite = true)
+                    gitOps.add(project.projectDir, patchFile.absolutePath)
                     println("  ➕ created:  $canonical.patch")
                     created++
                 }
@@ -742,6 +743,7 @@ tasks.register("rebuildFilePatches") {
             val canonical = patchCanonical(patch)
             if (canonical !in changedSet) {
                 patch.delete()
+                gitOps.add(project.projectDir, patch.absolutePath)
                 println("  🗑 removed:  $canonical.patch")
                 removed++
             }
