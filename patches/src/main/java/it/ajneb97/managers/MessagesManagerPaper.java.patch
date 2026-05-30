@@ -1,0 +1,68 @@
+diff --git a/src/main/java/it/ajneb97/managers/MessagesManagerPaper.java b/src/main/java/it/ajneb97/managers/MessagesManagerPaper.java
+index 28af7bc..14efe90 100644
+--- a/src/main/java/it/ajneb97/managers/MessagesManagerPaper.java
++++ b/src/main/java/it/ajneb97/managers/MessagesManagerPaper.java
+@@ -26,6 +26,15 @@ public class MessagesManagerPaper {
+       ServerVersion var3 = Interactions.serverVersion;
+       Component var4 = MiniMessage.miniMessage().deserialize(var1);
+       Component var5 = MiniMessage.miniMessage().deserialize(var2.getString("nextDialogueText") + " ");
++
++      // Luma start - skip click actions on bedrock
++      if (dev.lumas.interactions.FloodgateHook.isBedrockPlayer(var0.getUniqueId())) {
++         var4 = var4.append(var5);
++         var0.sendMessage(MessagesManager.addPrefixMiniMessage(var4));
++         return;
++      }
++      // Luma end - skip click actions on bedrock
++
+       Component var6 = MiniMessage.miniMessage().deserialize(var2.getString("nextDialogueHover"));
+       var5 = var5.hoverEvent(HoverEvent.showText(var6));
+       if (var3.serverVersionGreaterEqualThan(var3, ServerVersion.v1_21_R5)) {
+@@ -45,6 +54,15 @@ public class MessagesManagerPaper {
+       ServerVersion var5 = Interactions.serverVersion;
+       Component var6 = MiniMessage.miniMessage().deserialize(var1);
+       Component var7 = MiniMessage.miniMessage().deserialize(var2);
++
++      // Luma start - skip click actions on bedrock
++      if (dev.lumas.interactions.FloodgateHook.isBedrockPlayer(var0.getUniqueId())) {
++         var6 = var6.append(var7);
++         var0.sendMessage(MessagesManager.addPrefixMiniMessage(var6));
++         return;
++      }
++      // Luma end - skip click actions on bedrock
++
+       Component var8 = MiniMessage.miniMessage().deserialize(var3.replace("%option%", var4 + 1 + ""));
+       var7 = var7.hoverEvent(HoverEvent.showText(var8));
+       if (var5.serverVersionGreaterEqualThan(var5, ServerVersion.v1_21_R5)) {
+@@ -64,6 +82,15 @@ public class MessagesManagerPaper {
+       LegacyComponentSerializer var3 = LegacyComponentSerializer.legacyAmpersand();
+       TextComponent var4 = var3.deserialize(MessagesManager.getLegacyColoredMessage(var1).replace("§", "&"));
+       TextComponent var5 = var3.deserialize(MessagesManager.getLegacyColoredMessage(var2.getString("nextDialogueText")).replace("§", "&") + " ");
++
++      // Luma start - skip click actions on bedrock
++      if (dev.lumas.interactions.FloodgateHook.isBedrockPlayer(var0.getUniqueId())) {
++         var4 = var4.append(var5);
++         var0.sendMessage(addPrefixLegacy(var4));
++         return;
++      }
++      // Luma end - skip click actions on bedrock
++
+       TextComponent var6 = var3.deserialize(MessagesManager.getLegacyColoredMessage(var2.getString("nextDialogueHover")).replace("§", "&"));
+       JsonObject var7 = new JsonObject();
+       var7.addProperty("player", var0.getName());
+@@ -78,6 +105,15 @@ public class MessagesManagerPaper {
+       LegacyComponentSerializer var5 = LegacyComponentSerializer.legacyAmpersand();
+       TextComponent var6 = var5.deserialize(MessagesManager.getLegacyColoredMessage(var1).replace("§", "&"));
+       TextComponent var7 = var5.deserialize(MessagesManager.getLegacyColoredMessage(var2).replace("§", "&") + " ");
++
++      // Luma start - skip click actions on bedrock
++      if (dev.lumas.interactions.FloodgateHook.isBedrockPlayer(var0.getUniqueId())) {
++         var6 = var6.append(var7);
++         var0.sendMessage(addPrefixLegacy(var6));
++         return;
++      }
++      // Luma end - skip click actions on bedrock
++
+       TextComponent var8 = var5.deserialize(MessagesManager.getLegacyColoredMessage(var3.replace("%option%", var4 + 1 + "")).replace("§", "&"));
+       JsonObject var9 = new JsonObject();
+       var9.addProperty("player", var0.getName());

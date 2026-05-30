@@ -26,6 +26,7 @@ repositories {
     maven("https://libraries.minecraft.net/")
     maven("https://repo.fancyinnovations.com/releases")
     //maven("https://repo.fancyplugins.de/releases")
+    maven("https://repo.opencollab.dev/main/")
 }
 
 dependencies {
@@ -46,6 +47,7 @@ dependencies {
     //compileOnly("de.oliver:FancyHolograms:2.4.2")
     compileOnly(files("sources/FancyNpcs-2.10.0.362.jar"))
     compileOnly(files("sources/FancyHolograms-2.10.0.190.jar"))
+    compileOnly("org.geysermc.floodgate:api:2.2.5-SNAPSHOT")
 }
 
 

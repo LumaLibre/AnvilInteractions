@@ -1,0 +1,30 @@
+diff --git a/src/main/java/it/ajneb97/MainCommand.java b/src/main/java/it/ajneb97/MainCommand.java
+index 63a0977..aaf38c8 100644
+--- a/src/main/java/it/ajneb97/MainCommand.java
++++ b/src/main/java/it/ajneb97/MainCommand.java
+@@ -238,7 +238,10 @@ public class MainCommand implements CommandExecutor, TabCompleter {
+                return;
+             }
+ 
+-            this.plugin.getConversationManager().endConversation(var8, ConversationEndReason.COMMAND);
++            // Luma start - Folia support
++            dev.lumas.interactions.FoliaUtils.runOnEntity(this.plugin, var8, () ->
++                    this.plugin.getConversationManager().endConversation(var8, ConversationEndReason.COMMAND));
++            // Luma end - Folia support
+             var3.sendMessage(var1, var4.getString("commandStopCorrect").replace("%player%", var8.getName()), true);
+          }
+       }
+@@ -310,7 +313,12 @@ public class MainCommand implements CommandExecutor, TabCompleter {
+ 
+                if (var2[2].equals("*")) {
+                   for (Player var18 : Bukkit.getOnlinePlayers()) {
+-                     var22.preStartConversation(var18, var14, var16, true, var15);
++                     // Luma start - Folia support
++                     final Location finalVar16 = var16;
++                     final int finalVar15 = var15;
++                     dev.lumas.interactions.FoliaUtils.runOnEntity(this.plugin, var18, () ->
++                             var22.preStartConversation(var18, var14, finalVar16, true, finalVar15));
++                     // Luma end - Folia support
+                   }
+ 
+                   var3.sendMessage(var1, var4.getString("commandStartConversationStartedForAll").replace("%conversation%", var6), true);

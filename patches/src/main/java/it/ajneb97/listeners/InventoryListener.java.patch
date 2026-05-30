@@ -1,0 +1,20 @@
+diff --git a/src/main/java/it/ajneb97/listeners/InventoryListener.java b/src/main/java/it/ajneb97/listeners/InventoryListener.java
+index f65eba8..655d8c0 100644
+--- a/src/main/java/it/ajneb97/listeners/InventoryListener.java
++++ b/src/main/java/it/ajneb97/listeners/InventoryListener.java
+@@ -76,11 +76,10 @@ public class InventoryListener implements Listener {
+       final String var4 = ChatColor.stripColor(var1.getMessage());
+       if (var3 != null) {
+          var1.setCancelled(true);
+-         (new BukkitRunnable() {
+-            public void run() {
+-               InventoryListener.this.plugin.getEditInventoryManager().writeChat(var3, var4);
+-            }
+-         }).runTaskLater(this.plugin, 1L);
++         // Luma start - Folia support
++         dev.lumas.interactions.FoliaUtils.runOnEntityLater(this.plugin, var2, () ->
++                 this.plugin.getEditInventoryManager().writeChat(var3, var4), 1L);
++         // Luma end - Folia support
+       }
+    }
+ }

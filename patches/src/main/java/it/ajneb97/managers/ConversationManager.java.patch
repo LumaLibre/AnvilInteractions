@@ -1,5 +1,5 @@
 diff --git a/src/main/java/it/ajneb97/managers/ConversationManager.java b/src/main/java/it/ajneb97/managers/ConversationManager.java
-index dd04f92..25a789e 100644
+index dd04f92..ec32ec5 100644
 --- a/src/main/java/it/ajneb97/managers/ConversationManager.java
 +++ b/src/main/java/it/ajneb97/managers/ConversationManager.java
 @@ -257,7 +257,7 @@ public class ConversationManager {
@@ -11,6 +11,17 @@ index dd04f92..25a789e 100644
        MainConfigManager var7 = this.plugin.getConfigsManager().getMainConfigManager();
        if (var7.isUseEmptySpaces()) {
           var4.sendMessage(var1, " ", false);
+@@ -357,8 +357,8 @@ public class ConversationManager {
+             String var15 = var5.getString("optionsFormat");
+             String var16 = var5.getString("clickableOptionHover");
+             boolean var17 = var3.isClickableOptions();
+-            String var18 = var15.replace("%number%", var9 + 1 + "").replace("%text%", var10.getText());
+-            if (var17) {
++            String var18 = var15.replace("%number%", var9 + 1 + "").replace("%text%", var10.getText().replaceAll("%number%", String.valueOf(var9 + 1))); // Luma - Apply hunks: da323db
++            if (var17 && !dev.lumas.interactions.FloodgateHook.isBedrockPlayer(var11.getUniqueId())) { // Luma - bedrock compatibility
+                ServerVersion var19 = Interactions.serverVersion;
+                if (this.plugin.getConfigsManager().getMainConfigManager().isUseMiniMessage()) {
+                   MessagesManagerPaper.sendOption(var11, var12, var18, var16, var9);
 @@ -409,7 +409,7 @@ public class ConversationManager {
  
     public boolean executeConditionalDialogue(PlayerConversation var1) {
@@ -20,6 +31,60 @@ index dd04f92..25a789e 100644
        ConditionsManager var4 = this.plugin.getConditionsManager();
        boolean var5 = this.plugin.getDependencyManager().isPlaceholderAPI();
        if (!var3.isEmpty()) {
+@@ -539,14 +539,14 @@ public class ConversationManager {
+                   boolean var15 = var5.isClickableOptions();
+ 
+                   for (int var16 = 0; var16 < var2.size(); var16++) {
+-                     String var17 = var13.replace("%number%", var16 + 1 + "").replace("%text%", ((Option)var2.get(var16)).getText());
++                     String var17 = var13.replace("%number%", var16 + 1 + "").replace("%text%", ((Option)var2.get(var16)).getText().replaceAll("%number%", String.valueOf(var16 + 1))); // Luma - Apply hunks: da323db
+                      if (var7) {
+                         var17 = PlaceholderAPI.setPlaceholders(var6, var17);
+                      }
+ 
+                      ArrayList var18 = new ArrayList();
+                      var18.add(var14.replace("%option%", var16 + 1 + ""));
+-                     if (var15) {
++                     if (var15 && !dev.lumas.interactions.FloodgateHook.isBedrockPlayer(var6.getUniqueId())) { // Luma - bedrock compatibility
+                         ServerVersion var19 = Interactions.serverVersion;
+                         if (var8) {
+                            if (var19.serverVersionGreaterEqualThan(var19, ServerVersion.v1_21_R5)) {
+@@ -582,22 +582,22 @@ public class ConversationManager {
+             var1.setWaitingForOptions(false);
+             var1.setInConditionalDialogueOptions(false);
+             final Option var5 = (Option)var3.get(var4);
+-            (new BukkitRunnable() {
+-               public void run() {
+-                  String var1x = var5.getStartConversation();
+-                  OptionSelectEvent var2x = new OptionSelectEvent(var1.getPlayer(), var1.getCurrentConversation(), var5, var1);
+-                  ConversationManager.this.plugin.getServer().getPluginManager().callEvent(var2x);
+-                  if (!var2x.isCancelled()) {
+-                     var1.setCurrentConversation(var1x);
+-                     if (!var5.getActions().isEmpty()) {
+-                        ActionUtils.executeActions(var5.getActions(), var1.getPlayer(), ConversationManager.this.plugin, 0, var1.getConversationEntity());
+-                     }
+-
+-                     var1.setSelectedOption(0);
+-                     ConversationManager.this.executeCurrentDialogue(var1);
++            // Luma start - Folia support
++            dev.lumas.interactions.FoliaUtils.runOnEntity(this.plugin, var1.getPlayer(), () -> {
++               String var1x = var5.getStartConversation();
++               OptionSelectEvent var2x = new OptionSelectEvent(var1.getPlayer(), var1.getCurrentConversation(), var5, var1);
++               ConversationManager.this.plugin.getServer().getPluginManager().callEvent(var2x);
++               if (!var2x.isCancelled()) {
++                  var1.setCurrentConversation(var1x);
++                  if (!var5.getActions().isEmpty()) {
++                     ActionUtils.executeActions(var5.getActions(), var1.getPlayer(), ConversationManager.this.plugin, 0, var1.getConversationEntity());
+                   }
++
++                  var1.setSelectedOption(0);
++                  ConversationManager.this.executeCurrentDialogue(var1);
+                }
+-            }).runTask(this.plugin);
++            });
++            // Luma end - Folia support
+             return true;
+          }
+       }
 @@ -674,7 +674,7 @@ public class ConversationManager {
           }
  

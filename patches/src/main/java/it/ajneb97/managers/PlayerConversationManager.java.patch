@@ -1,0 +1,12 @@
+diff --git a/src/main/java/it/ajneb97/managers/PlayerConversationManager.java b/src/main/java/it/ajneb97/managers/PlayerConversationManager.java
+index d8e1062..02dfa30 100644
+--- a/src/main/java/it/ajneb97/managers/PlayerConversationManager.java
++++ b/src/main/java/it/ajneb97/managers/PlayerConversationManager.java
+@@ -299,6 +299,7 @@ public class PlayerConversationManager {
+       if (!var2.getHideChatWhileInConversationType().equals("ALL") || !var2.isHideChatWhileInConversationCompatibilityMode()) {
+          if (var2.getHideChatWhileInConversationType().equals("CHAT") || var2.getHideChatWhileInConversationType().equals("ALL")) {
+             for (Player var4 : Bukkit.getOnlinePlayers()) {
++               if (!var1.getRecipients().contains(var4)) continue; // Luma - Apply hunks: a8151d0
+                PlayerConversation var5 = this.getPlayer(var4);
+                if (var5 != null) {
+                   boolean var6 = var1.getRecipients().contains(var4);
