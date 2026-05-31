@@ -1,16 +1,13 @@
 diff --git a/src/main/java/it/ajneb97/Interactions.java b/src/main/java/it/ajneb97/Interactions.java
-index 9695660..5c92255 100644
+index 9695660..7c3a83c 100644
 --- a/src/main/java/it/ajneb97/Interactions.java
 +++ b/src/main/java/it/ajneb97/Interactions.java
-@@ -58,7 +58,10 @@ public class Interactions extends JavaPlugin {
+@@ -58,7 +58,7 @@ public class Interactions extends JavaPlugin {
     private SavePlayerDataTask savePlayerDataTask;
  
     public void onEnable() {
 -      loadConfig0();
-+      // Luma start - decompile: synthetic method
-+      //loadConfig0();
-+      reloadConfig();
-+      // Luma end - decompile: synthetic method
++      reloadConfig(); // Luma - decompile: synthetic method
        this.setVersion();
        this.setPrefix();
        this.playerDataManager = new PlayerDataManager(this);
