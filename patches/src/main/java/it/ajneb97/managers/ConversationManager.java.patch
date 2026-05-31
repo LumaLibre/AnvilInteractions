@@ -1,8 +1,30 @@
 diff --git a/src/main/java/it/ajneb97/managers/ConversationManager.java b/src/main/java/it/ajneb97/managers/ConversationManager.java
-index dd04f92..ec32ec5 100644
+index dd04f92..0791489 100644
 --- a/src/main/java/it/ajneb97/managers/ConversationManager.java
 +++ b/src/main/java/it/ajneb97/managers/ConversationManager.java
-@@ -257,7 +257,7 @@ public class ConversationManager {
+@@ -142,7 +142,7 @@ public class ConversationManager {
+ 
+             if (var2.getCooldown() > 0) {
+                String var18 = var2.getFileName();
+-               if (!var1.hasPermission("interactions.admin") && !var1.hasPermission("interactions.bypasscooldown." + var18)) {
++               if (/*!var1.hasPermission("interactions.admin") && */!var1.hasPermission("interactions.bypasscooldown." + var18)) { // Luma - Add cooldown option
+                   long var22 = this.plugin.getPlayerDataManager().getCooldown(var1, var18);
+                   long var12 = var22 + var2.getCooldown() * 1000L;
+                   long var14 = System.currentTimeMillis();
+@@ -150,6 +150,12 @@ public class ConversationManager {
+                      String var16 = OtherUtils.getCooldown(var12 - var14);
+                      if (var4) {
+                         var6.sendMessage(var1, var7.getString("conversationCooldownError").replace("%time%", var16), true);
++                        // Luma start - Add cooldown option
++                        String var23 = var7.getString("conversationCooldownErrorActionbar");
++                        if (var23 != null && !var23.isEmpty()) {
++                           it.ajneb97.libs.actionbarapi.ActionBarAPI.sendActionBar(var1, var23.replace("%time%", var16));
++                        }
++                        // Luma end - Add cooldown option
+                      }
+ 
+                      return false;
+@@ -257,7 +263,7 @@ public class ConversationManager {
     }
  
     public void sendDialogueMessage(Player var1, Dialogue var2, FileConfiguration var3, MessagesManager var4, PlayerConversation var5) {
@@ -11,7 +33,7 @@ index dd04f92..ec32ec5 100644
        MainConfigManager var7 = this.plugin.getConfigsManager().getMainConfigManager();
        if (var7.isUseEmptySpaces()) {
           var4.sendMessage(var1, " ", false);
-@@ -357,8 +357,8 @@ public class ConversationManager {
+@@ -357,8 +363,8 @@ public class ConversationManager {
              String var15 = var5.getString("optionsFormat");
              String var16 = var5.getString("clickableOptionHover");
              boolean var17 = var3.isClickableOptions();
@@ -22,7 +44,7 @@ index dd04f92..ec32ec5 100644
                 ServerVersion var19 = Interactions.serverVersion;
                 if (this.plugin.getConfigsManager().getMainConfigManager().isUseMiniMessage()) {
                    MessagesManagerPaper.sendOption(var11, var12, var18, var16, var9);
-@@ -409,7 +409,7 @@ public class ConversationManager {
+@@ -409,7 +415,7 @@ public class ConversationManager {
  
     public boolean executeConditionalDialogue(PlayerConversation var1) {
        Dialogue var2 = var1.getCurrentDialogue();
@@ -31,7 +53,7 @@ index dd04f92..ec32ec5 100644
        ConditionsManager var4 = this.plugin.getConditionsManager();
        boolean var5 = this.plugin.getDependencyManager().isPlaceholderAPI();
        if (!var3.isEmpty()) {
-@@ -539,14 +539,14 @@ public class ConversationManager {
+@@ -539,14 +545,14 @@ public class ConversationManager {
                    boolean var15 = var5.isClickableOptions();
  
                    for (int var16 = 0; var16 < var2.size(); var16++) {
@@ -48,7 +70,7 @@ index dd04f92..ec32ec5 100644
                          ServerVersion var19 = Interactions.serverVersion;
                          if (var8) {
                             if (var19.serverVersionGreaterEqualThan(var19, ServerVersion.v1_21_R5)) {
-@@ -582,22 +582,22 @@ public class ConversationManager {
+@@ -582,22 +588,48 @@ public class ConversationManager {
              var1.setWaitingForOptions(false);
              var1.setInConditionalDialogueOptions(false);
              final Option var5 = (Option)var3.get(var4);
@@ -61,20 +83,44 @@ index dd04f92..ec32ec5 100644
 -                     var1.setCurrentConversation(var1x);
 -                     if (!var5.getActions().isEmpty()) {
 -                        ActionUtils.executeActions(var5.getActions(), var1.getPlayer(), ConversationManager.this.plugin, 0, var1.getConversationEntity());
--                     }
--
--                     var1.setSelectedOption(0);
--                     ConversationManager.this.executeCurrentDialogue(var1);
 +            // Luma start - Folia support
 +            dev.lumas.interactions.FoliaUtils.runOnEntity(this.plugin, var1.getPlayer(), () -> {
 +               String var1x = var5.getStartConversation();
++               // Luma start - Add cooldown option
++               String optionCooldownKey = "option:" + var1.getConversationEntity().getFileName() + ":" + var1.getCurrentConversation().getName() + ":" + var5.getName();
++               if (var5.getCooldown() > 0) {
++                  Player optionCooldownPlayer = var1.getPlayer();
++                  if (/*!optionCooldownPlayer.hasPermission("interactions.admin") && */!optionCooldownPlayer.hasPermission("interactions.bypasscooldown." + var1.getConversationEntity().getFileName())) {
++                     long storedTime = ConversationManager.this.plugin.getPlayerDataManager().getCooldown(optionCooldownPlayer, optionCooldownKey);
++                     long cooldownExpiry = storedTime + (long)var5.getCooldown() * 1000L;
++                     if (System.currentTimeMillis() < cooldownExpiry) {
++                        String timeLeft = OtherUtils.getCooldown(cooldownExpiry - System.currentTimeMillis());
++                        ConversationManager.this.plugin.getMessagesManager().sendMessage(optionCooldownPlayer, ConversationManager.this.plugin.getMessages().getString("optionCooldownError").replace("%time%", timeLeft), true);
++                        String optionCooldownActionbar = ConversationManager.this.plugin.getMessages().getString("optionCooldownErrorActionbar");
++                        if (optionCooldownActionbar != null && !optionCooldownActionbar.isEmpty()) {
++                           it.ajneb97.libs.actionbarapi.ActionBarAPI.sendActionBar(optionCooldownPlayer, optionCooldownActionbar.replace("%time%", timeLeft));
++                        }
++                        var1.setWaitingForOptions(true);
++                        return;
+                      }
++                  }
++               }
++               // Luma end - Add cooldown option
 +               OptionSelectEvent var2x = new OptionSelectEvent(var1.getPlayer(), var1.getCurrentConversation(), var5, var1);
 +               ConversationManager.this.plugin.getServer().getPluginManager().callEvent(var2x);
 +               if (!var2x.isCancelled()) {
 +                  var1.setCurrentConversation(var1x);
 +                  if (!var5.getActions().isEmpty()) {
 +                     ActionUtils.executeActions(var5.getActions(), var1.getPlayer(), ConversationManager.this.plugin, 0, var1.getConversationEntity());
++                  }
+ 
+-                     var1.setSelectedOption(0);
+-                     ConversationManager.this.executeCurrentDialogue(var1);
++                  // Luma start - Add cooldown option
++                  if (var5.getCooldown() > 0) {
++                     ConversationManager.this.plugin.getPlayerDataManager().addCooldown(var1.getPlayer(), optionCooldownKey);
                    }
++                  // Luma end - Add cooldown option
 +
 +                  var1.setSelectedOption(0);
 +                  ConversationManager.this.executeCurrentDialogue(var1);
@@ -85,7 +131,7 @@ index dd04f92..ec32ec5 100644
              return true;
           }
        }
-@@ -674,7 +674,7 @@ public class ConversationManager {
+@@ -674,7 +706,7 @@ public class ConversationManager {
           }
  
           var20.sendMessage(var1, var21.getString("conversationEnded"), false);

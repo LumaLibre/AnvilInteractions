@@ -1,0 +1,13 @@
+diff --git a/src/main/resources/messages.yml b/src/main/resources/messages.yml
+index 764ba2c..4985517 100644
+--- a/src/main/resources/messages.yml
++++ b/src/main/resources/messages.yml
+@@ -579,3 +579,8 @@ influenceRemoveCorrect: "&aRemoved &e%influence% &ainfluence from conversation e
+ influenceSetCorrect: "&aInfluence set to &e%influence% &aon conversation entity &e%conversation% &afor player &e%player%&a."
+ errorStartConversationInTheAir: "&cYou can't start a conversation while in the air!"
+ errorStartConversationAlreadyMounted: "&cYou can't start a conversation while being mounted!"
++# Luma start - Add cooldown option
++conversationCooldownErrorActionbar: ""
++optionCooldownError: "&cYou must wait &7%time% &cbefore selecting this option again."
++optionCooldownErrorActionbar: ""
++# Luma end - Add cooldown option

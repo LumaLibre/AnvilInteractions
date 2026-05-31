@@ -1,0 +1,19 @@
+diff --git a/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java b/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
+index 55cef57..c88901f 100644
+--- a/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
++++ b/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
+@@ -136,11 +136,14 @@ public class ConversationConfigsManager extends DataFolderConfigManager {
+                         var61 = var5.getStringList(var27 + "." + var57 + ".actions");
+                      }
+ 
++                     int optionCooldown = var5.contains(var27 + "." + var57 + ".cooldown") ? var5.getInt(var27 + "." + var57 + ".cooldown") : 0; // Luma - Add cooldown option
++
+                      Option var62 = new Option(var57);
+                      var62.setText(var58);
+                      var62.setStartConversation(var59);
+                      var62.setRequires(var60);
+                      var62.setActions(var61);
++                     var62.setCooldown(optionCooldown); // Luma - Add cooldown option
+                      var32.add(var62);
+                   }
+                }

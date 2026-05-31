@@ -1,0 +1,27 @@
+diff --git a/src/main/java/it/ajneb97/model/Option.java b/src/main/java/it/ajneb97/model/Option.java
+index 3ec1f3d..9fb9251 100644
+--- a/src/main/java/it/ajneb97/model/Option.java
++++ b/src/main/java/it/ajneb97/model/Option.java
+@@ -9,6 +9,7 @@ public class Option {
+    private String startConversation;
+    private List<String> requires;
+    private List<String> actions;
++   private int luma$Cooldown; // Luma - Add cooldown option
+ 
+    public Option(String var1) {
+       this.name = var1;
+@@ -60,4 +61,14 @@ public class Option {
+    public void setActions(List<String> var1) {
+       this.actions = var1;
+    }
++
++   // Luma start - Add cooldown option
++   public int getCooldown() {
++      return this.luma$Cooldown;
++   }
++
++   public void setCooldown(int var1) {
++      this.luma$Cooldown = var1;
++   }
++   // Luma end - Add cooldown option
+ }
