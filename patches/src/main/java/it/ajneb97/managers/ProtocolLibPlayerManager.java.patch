@@ -1,0 +1,83 @@
+diff --git a/src/main/java/it/ajneb97/managers/ProtocolLibPlayerManager.java b/src/main/java/it/ajneb97/managers/ProtocolLibPlayerManager.java
+index e5e3e78..e4fc2f3 100644
+--- a/src/main/java/it/ajneb97/managers/ProtocolLibPlayerManager.java
++++ b/src/main/java/it/ajneb97/managers/ProtocolLibPlayerManager.java
+@@ -36,11 +36,11 @@ import org.bukkit.scheduler.BukkitRunnable;
+ 
+ public class ProtocolLibPlayerManager {
+    private Interactions plugin;
+-   private ArrayList<ProtocolLibPlayer> players;
++   private java.util.List<ProtocolLibPlayer> players; // Luma - Folia support: ArrayList -> List
+ 
+    public ProtocolLibPlayerManager(Interactions var1) {
+       this.plugin = var1;
+-      this.players = new ArrayList<>();
++      this.players = new java.util.concurrent.CopyOnWriteArrayList<>(); // Luma - Folia support: ArrayList -> CopyOnWriteArrayList
+       ProtocolLibCooldownManager var2 = new ProtocolLibCooldownManager(var1);
+       var2.start();
+       PacketAdapter var3 = this.getMoveAdapter(Client.STEER_VEHICLE);
+@@ -197,6 +197,7 @@ public class ProtocolLibPlayerManager {
+    }
+ 
+    public void mountPlayer(final Player var1, ArmorStand var2, boolean var3) {
++      if (dev.lumas.interactions.FoliaUtils.isFolia()) return; // Luma - Folia support
+       double var4 = this.plugin.getConfigsManager().getMainConfigManager().getProtocollibMountHeightFix();
+       Location var6 = var1.getLocation().clone().add(0.0, var4, 0.0);
+       if (var2 == null) {
+@@ -219,28 +220,29 @@ public class ProtocolLibPlayerManager {
+       }
+ 
+       final int var8 = var2.getEntityId();
+-      (new BukkitRunnable() {
+-         public void run() {
+-            PacketContainer var1x = null;
+-            ServerVersion var2x = Interactions.serverVersion;
+-            if (var2x.serverVersionGreaterEqualThan(var2x, ServerVersion.v1_9_R1)) {
+-               PacketType var3x = Server.MOUNT;
+-               var1x = new PacketContainer(var3x);
+-               var1x.getIntegers().write(0, var8);
+-               var1x.getIntegerArrays().write(0, new int[]{var1.getEntityId()});
+-            } else {
+-               PacketType var5 = Server.ATTACH_ENTITY;
+-               var1x = new PacketContainer(var5);
+-               var1x.getIntegers().write(2, var8);
+-               var1x.getIntegers().write(1, var1.getEntityId());
+-            }
+-
+-            ProtocolLibrary.getProtocolManager().sendServerPacket(var1, var1x);
++      // Luma start - Folia support
++      dev.lumas.interactions.FoliaUtils.runAsyncLater(this.plugin, () -> {
++         PacketContainer var1x = null;
++         ServerVersion var2x = Interactions.serverVersion;
++         if (var2x.serverVersionGreaterEqualThan(var2x, ServerVersion.v1_9_R1)) {
++            PacketType var3x = Server.MOUNT;
++            var1x = new PacketContainer(var3x);
++            var1x.getIntegers().write(0, var8);
++            var1x.getIntegerArrays().write(0, new int[]{var1.getEntityId()});
++         } else {
++            PacketType var5 = Server.ATTACH_ENTITY;
++            var1x = new PacketContainer(var5);
++            var1x.getIntegers().write(2, var8);
++            var1x.getIntegers().write(1, var1.getEntityId());
+          }
+-      }).runTaskLaterAsynchronously(this.plugin, 1L);
++
++         ProtocolLibrary.getProtocolManager().sendServerPacket(var1, var1x);
++      }, 1L);
++      // Luma end - Folia support
+    }
+ 
+    public void unmountPlayer(Player var1) {
++      if (dev.lumas.interactions.FoliaUtils.isFolia()) return; // Luma - Folia support
+       ProtocolLibPlayer var2 = this.getPlayer(var1);
+       if (var2 != null) {
+          var2.getArmorStand().remove();
+@@ -273,7 +275,7 @@ public class ProtocolLibPlayerManager {
+       }
+    }
+ 
+-   public ArrayList<ProtocolLibPlayer> getPlayers() {
++   public java.util.List<ProtocolLibPlayer> getPlayers() { // Luma - Folia support: ArrayList -> List
+       return this.players;
+    }
+ }

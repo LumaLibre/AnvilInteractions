@@ -1,0 +1,24 @@
+diff --git a/src/main/java/it/ajneb97/managers/ProtocolLibCooldownManager.java b/src/main/java/it/ajneb97/managers/ProtocolLibCooldownManager.java
+index 19173ae..020f85f 100644
+--- a/src/main/java/it/ajneb97/managers/ProtocolLibCooldownManager.java
++++ b/src/main/java/it/ajneb97/managers/ProtocolLibCooldownManager.java
+@@ -14,14 +14,14 @@ public class ProtocolLibCooldownManager {
+    }
+ 
+    public void start() {
+-      (new BukkitRunnable() {
+-         public void run() {
+-            ProtocolLibCooldownManager.this.execute();
+-         }
+-      }).runTaskTimer(this.plugin, 0L, 15L);
++      // Luma start - Folia support
++      dev.lumas.interactions.FoliaUtils.runGlobalTimer(this.plugin, task ->
++              this.execute(), 1L, 15L);
++      // Luma end - Folia support
+    }
+ 
+    public void execute() {
++      if (dev.lumas.interactions.FoliaUtils.isFolia()) return; // Luma - Folia support
+       MainConfigManager var1 = this.plugin.getConfigsManager().getMainConfigManager();
+       if (var1.getBlockMovementMode().equals(BlockMovementMode.PROTOCOLLIB)) {
+          ProtocolLibPlayerManager var2 = this.plugin.getDependencyManager().getProtocolLibManager();

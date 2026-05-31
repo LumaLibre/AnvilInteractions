@@ -1,0 +1,41 @@
+diff --git a/src/main/java/it/ajneb97/tasks/WriteDialogueTask.java b/src/main/java/it/ajneb97/tasks/WriteDialogueTask.java
+index 4c93df2..f155f7a 100644
+--- a/src/main/java/it/ajneb97/tasks/WriteDialogueTask.java
++++ b/src/main/java/it/ajneb97/tasks/WriteDialogueTask.java
+@@ -26,6 +26,7 @@ public class WriteDialogueTask {
+    private MessagesManager msgManager;
+    private FileConfiguration messages;
+    private boolean isMiniMessage;
++   private io.papermc.paper.threadedregions.scheduler.ScheduledTask luma$scheduledTask; // Luma - Folia support
+ 
+    public WriteDialogueTask(Interactions var1, List<String> var2, WriteDialoguesMode var3, int var4, PlayerConversation var5) {
+       this.plugin = var1;
+@@ -43,19 +44,20 @@ public class WriteDialogueTask {
+    }
+ 
+    public void start() {
+-      (new BukkitRunnable() {
+-         public void run() {
+-            if (WriteDialogueTask.this.end) {
+-               this.cancel();
+-            } else {
+-               WriteDialogueTask.this.execute();
+-            }
++      // Luma start - Folia support
++      this.luma$scheduledTask = dev.lumas.interactions.FoliaUtils.runOnEntityTimer(this.plugin, this.playerConversation.getPlayer(), task -> {
++         if (this.end) {
++            task.cancel();
++         } else {
++            this.execute();
+          }
+-      }).runTaskTimer(this.plugin, 0L, this.delay);
++      }, 1L, this.delay);
++      // Luma end - Folia support
+    }
+ 
+    public void end(boolean var1) {
+       this.end = true;
++      dev.lumas.interactions.FoliaUtils.cancelTask(this.luma$scheduledTask); // Luma - Folia support
+       if (var1) {
+          for (int var2 = 0; var2 <= 18; var2++) {
+             this.msgManager.sendMessage(this.playerConversation.getPlayer(), " ", false);

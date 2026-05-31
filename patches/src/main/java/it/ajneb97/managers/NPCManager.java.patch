@@ -1,17 +1,51 @@
 diff --git a/src/main/java/it/ajneb97/managers/NPCManager.java b/src/main/java/it/ajneb97/managers/NPCManager.java
-index 937351a..9f81079 100644
+index 937351a..bfc256e 100644
 --- a/src/main/java/it/ajneb97/managers/NPCManager.java
 +++ b/src/main/java/it/ajneb97/managers/NPCManager.java
-@@ -159,7 +159,7 @@ public class NPCManager {
-       final Collection var5 = var1.getWorld().getNearbyEntities(var1, var4, 5.0, var4);
-       (new BukkitRunnable() {
-          public void run() {
--            ArrayList var1x = NPCManager.this.getNearbyPossibleNPCs(var1, var4, var5);
-+            ArrayList<ConversationNPC> var1x = NPCManager.this.getNearbyPossibleNPCs(var1, var4, var5); // Luma - decompile
-             NearConversationEntity var2x = null;
+@@ -157,33 +157,31 @@ public class NPCManager {
+       }
  
-             for (ConversationNPC var4x : var1x) {
-@@ -183,7 +183,7 @@ public class NPCManager {
+       final Collection var5 = var1.getWorld().getNearbyEntities(var1, var4, 5.0, var4);
+-      (new BukkitRunnable() {
+-         public void run() {
+-            ArrayList var1x = NPCManager.this.getNearbyPossibleNPCs(var1, var4, var5);
+-            NearConversationEntity var2x = null;
+-
+-            for (ConversationNPC var4x : var1x) {
+-               ConversationEntity var5x = NPCManager.this.getConversationEntityFromNpc(var4x);
+-               if (var5x != null && NPCManager.this.isNPCinRadius(var5x, var1, var4x.getLocation())) {
+-                  var2x = new NearConversationEntity(var5x, var4x.getLocation());
+-                  break;
+-               }
++      // Luma start - Folia support
++      dev.lumas.interactions.FoliaUtils.runAsync(this.plugin, () -> {
++         ArrayList<ConversationNPC> var1x = NPCManager.this.getNearbyPossibleNPCs(var1, var4, var5); // Luma - decompile
++         NearConversationEntity var2x = null;
++
++         for (ConversationNPC var4x : var1x) {
++            ConversationEntity var5x = NPCManager.this.getConversationEntityFromNpc(var4x);
++            if (var5x != null && NPCManager.this.isNPCinRadius(var5x, var1, var4x.getLocation())) {
++               var2x = new NearConversationEntity(var5x, var4x.getLocation());
++               break;
+             }
+-
+-            final NearConversationEntity var6 = var2x;
+-            (new BukkitRunnable() {
+-               public void run() {
+-                  var3.onDone(var6);
+-               }
+-            }).runTask(NPCManager.this.plugin);
+          }
+-      }).runTaskAsynchronously(this.plugin);
++
++         final NearConversationEntity var6 = var2x;
++         dev.lumas.interactions.FoliaUtils.runOnRegion(NPCManager.this.plugin, var1, () -> {
++            var3.onDone(var6);
++         });
++      });
++      // Luma end - Folia support
+    }
+ 
     public ConversationNPC getPossibleConversationNPCFromView(Player var1) {
        DependencyManager var2 = this.plugin.getDependencyManager();
        if (var2.isFancyNpcs()) {

@@ -1,7 +1,71 @@
 diff --git a/src/main/java/it/ajneb97/managers/PlayerConversationManager.java b/src/main/java/it/ajneb97/managers/PlayerConversationManager.java
-index d8e1062..02dfa30 100644
+index d8e1062..0948ae9 100644
 --- a/src/main/java/it/ajneb97/managers/PlayerConversationManager.java
 +++ b/src/main/java/it/ajneb97/managers/PlayerConversationManager.java
+@@ -37,14 +37,14 @@ import org.bukkit.util.Vector;
+ 
+ public class PlayerConversationManager {
+    private Interactions plugin;
+-   private ArrayList<PlayerConversation> players;
++   private java.util.List<PlayerConversation> players; // Luma - Folia support: ArrayList -> List
+ 
+    public PlayerConversationManager(Interactions var1) {
+       this.plugin = var1;
+-      this.players = new ArrayList<>();
++      this.players = new java.util.concurrent.CopyOnWriteArrayList<>(); // Luma - Folia support: ArrayList -> CopyOnWriteArrayList
+    }
+ 
+-   public ArrayList<PlayerConversation> getPlayers() {
++   public java.util.List<PlayerConversation> getPlayers() { // Luma - Folia support: ArrayList -> List
+       return this.players;
+    }
+ 
+@@ -119,18 +119,18 @@ public class PlayerConversationManager {
+ 
+    public void removeTargets(boolean var1, final Player var2) {
+       if (!var1) {
+-         (new BukkitRunnable() {
+-            public void run() {
+-               for (Entity var3 : var2.getWorld().getNearbyEntities(var2.getLocation(), 30.0, 30.0, 30.0)) {
+-                  if (var3 instanceof Creature) {
+-                     Creature var4 = (Creature)var3;
+-                     if (var4.getTarget() != null && var4.getTarget().equals(var2)) {
+-                        var4.setTarget(null);
+-                     }
++         // Luma start - Folia support
++         dev.lumas.interactions.FoliaUtils.runOnRegion(this.plugin, var2.getLocation(), () -> {
++            for (Entity var3 : var2.getWorld().getNearbyEntities(var2.getLocation(), 30.0, 30.0, 30.0)) {
++               if (var3 instanceof Creature) {
++                  Creature var4 = (Creature)var3;
++                  if (var4.getTarget() != null && var4.getTarget().equals(var2)) {
++                     var4.setTarget(null);
+                   }
+                }
+             }
+-         }).runTask(this.plugin);
++         });
++         // Luma end - Folia support
+       }
+    }
+ 
+@@ -170,7 +170,7 @@ public class PlayerConversationManager {
+             double var17 = var3.getY();
+             if (var6.getBlockMovementMode().equals(BlockMovementMode.NORMAL)) {
+                if (var29 != var17) {
+-                  var1.teleport(var2);
++                  var1.teleportAsync(var2); // Luma - Folia support: teleport -> teleportAsync
+                   var4.setCancelled(true);
+                   if (var6.getSelectableOptions().isEnabled()
+                      && var5.isWaitingForOptions()
+@@ -179,7 +179,7 @@ public class PlayerConversationManager {
+                   }
+                } else {
+                   if (var27 != var30 || var28 != var15) {
+-                     var1.teleport(var2);
++                     var1.teleportAsync(var2); // Luma - Folia support: teleport -> teleportAsync
+                      var4.setCancelled(true);
+                      SelectableOptionsConfig var19 = var6.getSelectableOptions();
+                      if (var19.isEnabled() && var5.isWaitingForOptions()) {
 @@ -299,6 +299,7 @@ public class PlayerConversationManager {
        if (!var2.getHideChatWhileInConversationType().equals("ALL") || !var2.isHideChatWhileInConversationCompatibilityMode()) {
           if (var2.getHideChatWhileInConversationType().equals("CHAT") || var2.getHideChatWhileInConversationType().equals("ALL")) {

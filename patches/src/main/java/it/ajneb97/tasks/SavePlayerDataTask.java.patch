@@ -1,0 +1,44 @@
+diff --git a/src/main/java/it/ajneb97/tasks/SavePlayerDataTask.java b/src/main/java/it/ajneb97/tasks/SavePlayerDataTask.java
+index 5c7d518..bbfae28 100644
+--- a/src/main/java/it/ajneb97/tasks/SavePlayerDataTask.java
++++ b/src/main/java/it/ajneb97/tasks/SavePlayerDataTask.java
+@@ -6,29 +6,27 @@ import org.bukkit.scheduler.BukkitRunnable;
+ 
+ public class SavePlayerDataTask {
+    private Interactions plugin;
+-   private boolean end;
++   //private boolean end; // Luma - Folia support
++   private io.papermc.paper.threadedregions.scheduler.ScheduledTask luma$scheduledTask; // Luma - Folia support
+ 
+    public SavePlayerDataTask(Interactions var1) {
+       this.plugin = var1;
+-      this.end = false;
++      //this.end = false; // Luma - Folia support
+    }
+ 
+    public void start() {
+       MainConfigManager var1 = this.plugin.getConfigsManager().getMainConfigManager();
+       int var2 = var1.getDataAutoSaveTime();
+-      (new BukkitRunnable() {
+-         public void run() {
+-            if (SavePlayerDataTask.this.end) {
+-               this.cancel();
+-            } else {
+-               SavePlayerDataTask.this.execute();
+-            }
+-         }
+-      }).runTaskTimerAsynchronously(this.plugin, 20L * var2, 20L * var2);
++      // Luma start - Folia support
++      long period = 20L * (long) var2;
++      this.luma$scheduledTask = dev.lumas.interactions.FoliaUtils.runAsyncTimer(this.plugin, task -> {
++         this.execute();
++      }, period, period);
++      // Luma end - Folia support
+    }
+ 
+    public void end() {
+-      this.end = true;
++      dev.lumas.interactions.FoliaUtils.cancelTask(this.luma$scheduledTask); // Luma - Folia support
+    }
+ 
+    public void execute() {

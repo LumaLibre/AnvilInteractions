@@ -1,0 +1,43 @@
+diff --git a/src/main/java/it/ajneb97/tasks/DialogueTask.java b/src/main/java/it/ajneb97/tasks/DialogueTask.java
+index 21772c6..b008043 100644
+--- a/src/main/java/it/ajneb97/tasks/DialogueTask.java
++++ b/src/main/java/it/ajneb97/tasks/DialogueTask.java
+@@ -7,28 +7,29 @@ import org.bukkit.scheduler.BukkitRunnable;
+ public class DialogueTask {
+    private Interactions plugin;
+    private PlayerConversation playerConversation;
+-   boolean cancelled;
++   //boolean cancelled; // Luma - Folia support
++   private io.papermc.paper.threadedregions.scheduler.ScheduledTask luma$scheduledTask; // Luma - Folia support
+ 
+    public DialogueTask(Interactions var1, PlayerConversation var2) {
+       this.plugin = var1;
+       this.playerConversation = var2;
+-      this.cancelled = false;
++      //this.cancelled = false; // Luma - Folia support
+    }
+ 
+    public void start(int var1) {
+-      (new BukkitRunnable() {
+-         public void run() {
+-            DialogueTask.this.execute();
+-         }
+-      }).runTaskLater(this.plugin, var1 * 20L);
++      // Luma start - Folia support
++      dev.lumas.interactions.FoliaUtils.runOnEntityLater(this.plugin, this.playerConversation.getPlayer(), () -> {
++         this.execute();
++      }, var1 * 20L);
++      // Luma end - Folia support
+    }
+ 
+    public void stop() {
+-      this.cancelled = true;
++      dev.lumas.interactions.FoliaUtils.cancelTask(this.luma$scheduledTask); // Luma - Folia support
+    }
+ 
+    public void execute() {
+-      if (!this.cancelled) {
++      if (!this.luma$scheduledTask.isCancelled()) { // Luma - Folia support
+          this.plugin.getConversationManager().executeEndDialogue(this.playerConversation, false);
+       }
+    }

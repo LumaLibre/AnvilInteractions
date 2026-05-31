@@ -1,0 +1,39 @@
+diff --git a/src/main/java/it/ajneb97/tasks/BossBarTask.java b/src/main/java/it/ajneb97/tasks/BossBarTask.java
+index dde1581..21b85fd 100644
+--- a/src/main/java/it/ajneb97/tasks/BossBarTask.java
++++ b/src/main/java/it/ajneb97/tasks/BossBarTask.java
+@@ -10,6 +10,7 @@ public class BossBarTask {
+    private Interactions plugin;
+    private PlayerConversation playerConversation;
+    private boolean cancelled = false;
++   private io.papermc.paper.threadedregions.scheduler.ScheduledTask luma$scheduledTask; // Luma - Folia support
+ 
+    public BossBarTask(Interactions var1, PlayerConversation var2, int var3) {
+       this.plugin = var1;
+@@ -24,13 +25,13 @@ public class BossBarTask {
+          this.playerConversation.getBossBar().setProgress(var1);
+       }
+ 
+-      (new BukkitRunnable() {
+-         public void run() {
+-            if (!BossBarTask.this.execute()) {
+-               this.cancel();
+-            }
++      // Luma start - Folia support
++      this.luma$scheduledTask = dev.lumas.interactions.FoliaUtils.runAsyncTimer(this.plugin, task -> {
++         if (!this.execute()) {
++            task.cancel();
+          }
+-      }).runTaskTimerAsynchronously(this.plugin, 20L, 20L);
++      }, 20L, 20L);
++      // Luma end - Folia support
+    }
+ 
+    protected boolean execute() {
+@@ -49,5 +50,6 @@ public class BossBarTask {
+ 
+    public void stop() {
+       this.cancelled = true;
++      dev.lumas.interactions.FoliaUtils.cancelTask(this.luma$scheduledTask); // Luma - Folia support
+    }
+ }

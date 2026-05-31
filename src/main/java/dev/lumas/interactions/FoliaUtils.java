@@ -108,6 +108,15 @@ public class FoliaUtils {
         }
     }
 
+    public static void runAsyncLater(Plugin plugin, Runnable task, long delayTicks) {
+        if (IS_FOLIA) {
+            long delayMs = delayTicks * 50L;
+            Bukkit.getAsyncScheduler().runDelayed(plugin, scheduledTask -> task.run(), delayMs, TimeUnit.MILLISECONDS);
+        } else {
+            Bukkit.getScheduler().runTaskLaterAsynchronously(plugin, task, delayTicks);
+        }
+    }
+
     public static ScheduledTask runAsyncTimer(Plugin plugin, Consumer<ScheduledTask> task, long delayTicks, long periodTicks) {
         if (IS_FOLIA) {
             long delayMs = delayTicks * 50L;

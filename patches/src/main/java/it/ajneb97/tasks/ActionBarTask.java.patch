@@ -1,0 +1,41 @@
+diff --git a/src/main/java/it/ajneb97/tasks/ActionBarTask.java b/src/main/java/it/ajneb97/tasks/ActionBarTask.java
+index 6f909e4..3a3841b 100644
+--- a/src/main/java/it/ajneb97/tasks/ActionBarTask.java
++++ b/src/main/java/it/ajneb97/tasks/ActionBarTask.java
+@@ -6,7 +6,8 @@ import it.ajneb97.model.player.PlayerConversation;
+ import org.bukkit.scheduler.BukkitRunnable;
+ 
+ public class ActionBarTask {
+-   int taskID;
++   //int taskID; // Luma - Folia support
++   private io.papermc.paper.threadedregions.scheduler.ScheduledTask luma$scheduledTask; // Luma - Folia support
+    private Interactions plugin;
+    private PlayerConversation playerConversation;
+    private String actionBarTitleConversation;
+@@ -26,13 +27,13 @@ public class ActionBarTask {
+    }
+ 
+    public void start() {
+-      (new BukkitRunnable() {
+-         public void run() {
+-            if (!ActionBarTask.this.execute()) {
+-               this.cancel();
+-            }
++      // Luma start - Folia support
++      this.luma$scheduledTask = dev.lumas.interactions.FoliaUtils.runAsyncTimer(this.plugin, task -> {
++         if (!this.execute()) {
++            task.cancel();
+          }
+-      }).runTaskTimerAsynchronously(this.plugin, 0L, 20L);
++      }, 1L, 20L);
++      // Luma end - Folia support
+    }
+ 
+    protected boolean execute() {
+@@ -51,5 +52,6 @@ public class ActionBarTask {
+ 
+    public void stop() {
+       this.cancelled = true;
++      dev.lumas.interactions.FoliaUtils.cancelTask(this.luma$scheduledTask); // Luma - Folia support
+    }
+ }

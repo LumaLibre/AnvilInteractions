@@ -1,0 +1,70 @@
+diff --git a/src/main/java/it/ajneb97/managers/holograms/HologramsManager.java b/src/main/java/it/ajneb97/managers/holograms/HologramsManager.java
+index d8919ca..c306b7f 100644
+--- a/src/main/java/it/ajneb97/managers/holograms/HologramsManager.java
++++ b/src/main/java/it/ajneb97/managers/holograms/HologramsManager.java
+@@ -32,39 +32,39 @@ public class HologramsManager {
+ 
+    public void createHologram(final Player var1, final InteractionsHologram var2) {
+       if (this.hologramCompatibility != null) {
+-         (new BukkitRunnable() {
+-            public void run() {
+-               switch (HologramsManager.this.hologramCompatibility) {
+-                  case HOLOGRAPHIC_DISPLAY:
+-                     HologramsManager.this.holographicDisplays.createHologram(var1, var2);
+-                     break;
+-                  case DECENT_HOLOGRAMS:
+-                     HologramsManager.this.decentHolograms.createHologram(var1, var2);
+-                     break;
+-                  case FANCY_HOLOGRAMS:
+-                     HologramsManager.this.fancyHologramsManager.createHologram(var1, var2);
+-               }
++         // Luma start - Folia support
++         dev.lumas.interactions.FoliaUtils.runOnRegion(this.plugin, var2.getLocation(), () -> {
++            switch (this.hologramCompatibility) {
++               case HOLOGRAPHIC_DISPLAY:
++                  this.holographicDisplays.createHologram(var1, var2);
++                  break;
++               case DECENT_HOLOGRAMS:
++                  this.decentHolograms.createHologram(var1, var2);
++                  break;
++               case FANCY_HOLOGRAMS:
++                  this.fancyHologramsManager.createHologram(var1, var2);
+             }
+-         }).runTask(this.plugin);
++         });
++         // Luma end - Folia support
+       }
+    }
+ 
+    public void removeHologram(final long var1, final String var3) {
+       if (this.hologramCompatibility != null) {
+-         (new BukkitRunnable() {
+-            public void run() {
+-               switch (HologramsManager.this.hologramCompatibility) {
+-                  case HOLOGRAPHIC_DISPLAY:
+-                     HologramsManager.this.holographicDisplays.removeHologram(var1);
+-                     break;
+-                  case DECENT_HOLOGRAMS:
+-                     HologramsManager.this.decentHolograms.removeHologram(var3);
+-                     break;
+-                  case FANCY_HOLOGRAMS:
+-                     HologramsManager.this.fancyHologramsManager.removeHologram(var3);
+-               }
++         // Luma start - Folia support
++         dev.lumas.interactions.FoliaUtils.runGlobal(this.plugin, () -> {
++            switch (this.hologramCompatibility) {
++               case HOLOGRAPHIC_DISPLAY:
++                  this.holographicDisplays.removeHologram(var1);
++                  break;
++               case DECENT_HOLOGRAMS:
++                  this.decentHolograms.removeHologram(var3);
++                  break;
++               case FANCY_HOLOGRAMS:
++                  this.fancyHologramsManager.removeHologram(var3);
+             }
+-         }).runTask(this.plugin);
++         });
++         // Luma end - Folia support
+       }
+    }
+ }

@@ -1,0 +1,148 @@
+diff --git a/src/main/java/it/ajneb97/managers/ConversationTaskManager.java b/src/main/java/it/ajneb97/managers/ConversationTaskManager.java
+index aa19574..95569a6 100644
+--- a/src/main/java/it/ajneb97/managers/ConversationTaskManager.java
++++ b/src/main/java/it/ajneb97/managers/ConversationTaskManager.java
+@@ -19,47 +19,51 @@ public class ConversationTaskManager {
+    }
+ 
+    public void startConversationEntryTask() {
+-      (new BukkitRunnable() {
+-         public void run() {
+-            ConversationTaskManager.this.executeConversationEntryTask();
+-         }
+-      }).runTaskTimer(this.plugin, 20L, 20L);
++      // Luma start - Folia support
++      dev.lumas.interactions.FoliaUtils.runGlobalTimer(this.plugin, task -> {
++         this.executeConversationEntryTask();
++      }, 20L, 20L);
++      // Luma end - Folia support
+    }
+ 
+    public void startConversationQuitTask() {
+-      (new BukkitRunnable() {
+-         public void run() {
+-            ConversationTaskManager.this.executeConversationLeaveTask();
+-         }
+-      }).runTaskTimer(this.plugin, 20L, 20L);
++      // Luma start - Folia support
++      dev.lumas.interactions.FoliaUtils.runGlobalTimer(this.plugin, task -> {
++         this.executeConversationLeaveTask();
++      }, 20L, 20L);
++      // Luma end - Folia support
+    }
+ 
+    protected void executeConversationEntryTask() {
+       PlayerConversationManager var1 = this.plugin.getPlayerConversationManager();
+ 
+       for (Player var3 : Bukkit.getOnlinePlayers()) {
+-         PlayerConversation var4 = var1.getPlayer(var3);
+-         if (var4 == null) {
+-            this.plugin.getNpcManager().getNearConversationEntity(var3.getLocation(), false, var2 -> {
+-               if (var2 != null) {
+-                  ConversationEntity var3x = var2.getConversationEntity();
+-                  boolean var4x = false;
+-                  if (var3.hasMetadata("interactions_inside_radius")) {
+-                     String var5 = ((MetadataValue)var3.getMetadata("interactions_inside_radius").get(0)).asString();
+-                     if (!var5.equals(var3x.getFileName())) {
++         // Luma start - Folia support
++         dev.lumas.interactions.FoliaUtils.runOnEntity(this.plugin, var3, () -> {
++            PlayerConversation var4 = var1.getPlayer(var3);
++            if (var4 == null) {
++               this.plugin.getNpcManager().getNearConversationEntity(var3.getLocation(), false, var2 -> {
++                  if (var2 != null) {
++                     ConversationEntity var3x = var2.getConversationEntity();
++                     boolean var4x = false;
++                     if (var3.hasMetadata("interactions_inside_radius")) {
++                        String var5 = ((MetadataValue)var3.getMetadata("interactions_inside_radius").get(0)).asString();
++                        if (!var5.equals(var3x.getFileName())) {
++                           var4x = true;
++                        }
++                     } else {
+                         var4x = true;
+                      }
+-                  } else {
+-                     var4x = true;
+-                  }
+ 
+-                  if (var4x) {
+-                     var3.setMetadata("interactions_inside_radius", new FixedMetadataValue(this.plugin, var3x.getFileName()));
+-                     this.plugin.getConversationManager().preStartConversation(var3, var3x, var2.getEntityLocation(), false, 0);
++                     if (var4x) {
++                        var3.setMetadata("interactions_inside_radius", new FixedMetadataValue(this.plugin, var3x.getFileName()));
++                        this.plugin.getConversationManager().preStartConversation(var3, var3x, var2.getEntityLocation(), false, 0);
++                     }
+                   }
+-               }
+-            });
+-         }
++               });
++            }
++         });
++         // Luma end - Folia support
+       }
+    }
+ 
+@@ -67,35 +71,39 @@ public class ConversationTaskManager {
+       PlayerConversationManager var1 = this.plugin.getPlayerConversationManager();
+ 
+       for (Player var3 : Bukkit.getOnlinePlayers()) {
+-         PlayerConversation var4 = var1.getPlayer(var3);
+-         if (var4 == null) {
+-            if (var3.hasMetadata("interactions_inside_radius")) {
+-               this.plugin.getNpcManager().getNearConversationEntity(var3.getLocation(), true, var2 -> {
+-                  if (var2 == null) {
+-                     var3.removeMetadata("interactions_inside_radius", this.plugin);
+-                  }
+-               });
+-            }
+-         } else {
+-            Location var5 = var4.getConversationLocation();
+-            if (var5 != null) {
+-               boolean var6 = false;
+-               if (!var5.getWorld().equals(var3.getWorld())) {
+-                  var6 = true;
+-               } else {
+-                  double var7 = var3.getLocation().distance(var5);
+-                  double var9 = var4.getConversationEntity().getEndConversationRadius();
+-                  if (var9 != 0.0 && var7 > var9) {
++         // Luma start - Folia support
++         dev.lumas.interactions.FoliaUtils.runOnEntity(this.plugin, var3, () -> {
++            PlayerConversation var4 = var1.getPlayer(var3);
++            if (var4 == null) {
++               if (var3.hasMetadata("interactions_inside_radius")) {
++                  this.plugin.getNpcManager().getNearConversationEntity(var3.getLocation(), true, var2 -> {
++                     if (var2 == null) {
++                        var3.removeMetadata("interactions_inside_radius", this.plugin);
++                     }
++                  });
++               }
++            } else {
++               Location var5 = var4.getConversationLocation();
++               if (var5 != null) {
++                  boolean var6 = false;
++                  if (!var5.getWorld().equals(var3.getWorld())) {
+                      var6 = true;
++                  } else {
++                     double var7 = var3.getLocation().distance(var5);
++                     double var9 = var4.getConversationEntity().getEndConversationRadius();
++                     if (var9 != 0.0 && var7 > var9) {
++                        var6 = true;
++                     }
+                   }
+-               }
+ 
+-               if (var6) {
+-                  var3.removeMetadata("interactions_inside_radius", this.plugin);
+-                  this.plugin.getConversationManager().endConversation(var3, ConversationEndReason.RADIUS_EXIT);
++                  if (var6) {
++                     var3.removeMetadata("interactions_inside_radius", this.plugin);
++                     this.plugin.getConversationManager().endConversation(var3, ConversationEndReason.RADIUS_EXIT);
++                  }
+                }
+             }
+-         }
++         });
++         // Luma end - Folia support
+       }
+    }
+ }
