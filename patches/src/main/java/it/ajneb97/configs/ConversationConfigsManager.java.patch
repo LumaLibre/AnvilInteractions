@@ -1,12 +1,8 @@
 diff --git a/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java b/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
-index 55cef57..90ea69f 100644
+index 55cef57..1796b92 100644
 --- a/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
 +++ b/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
-@@ -10,13 +10,44 @@ import it.ajneb97.model.Option;
- import java.io.File;
- import java.util.ArrayList;
- import java.util.List;
-+
+@@ -13,10 +13,40 @@ import java.util.List;
  import org.bukkit.configuration.file.FileConfiguration;
  
  public class ConversationConfigsManager extends DataFolderConfigManager {
@@ -47,7 +43,7 @@ index 55cef57..90ea69f 100644
     @Override
     public void createFiles() {
        new CommonConfig("guard1.yml", this.plugin, this.folderName, false).registerConfig();
-@@ -136,11 +167,14 @@ public class ConversationConfigsManager extends DataFolderConfigManager {
+@@ -136,11 +166,14 @@ public class ConversationConfigsManager extends DataFolderConfigManager {
                          var61 = var5.getStringList(var27 + "." + var57 + ".actions");
                       }
  

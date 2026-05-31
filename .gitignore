@@ -20,13 +20,18 @@ sources/*.jar
 # Decompiler downloads
 build/decompiler/
 
-!patches/**/*.patch
-
 # Source code
 api/
 core/
 nms/
 src/
+
+# Patch working dirs
+/.patch-work/
+/.patch-rejects/
+
+!/patches/
+!/patches/**
 
 # OS files
 .DS_Store
