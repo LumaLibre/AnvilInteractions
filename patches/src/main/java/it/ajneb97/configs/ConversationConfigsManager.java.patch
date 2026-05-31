@@ -1,8 +1,53 @@
 diff --git a/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java b/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
-index 55cef57..c88901f 100644
+index 55cef57..90ea69f 100644
 --- a/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
 +++ b/src/main/java/it/ajneb97/configs/ConversationConfigsManager.java
-@@ -136,11 +136,14 @@ public class ConversationConfigsManager extends DataFolderConfigManager {
+@@ -10,13 +10,44 @@ import it.ajneb97.model.Option;
+ import java.io.File;
+ import java.util.ArrayList;
+ import java.util.List;
++
+ import org.bukkit.configuration.file.FileConfiguration;
+ 
+ public class ConversationConfigsManager extends DataFolderConfigManager {
++   // Luma start - Collect conversation configs from subfolders
++   private static final java.util.Set<String> LUMA$EXCLUDED_FOLDERS =
++           new java.util.HashSet<>(java.util.Arrays.asList("backup", "backups", "unused", "default", "defaults"));
++   // Luma end - Collect conversation configs from subfolders
+    public ConversationConfigsManager(Interactions var1, String var2) {
+       super(var1, var2);
+    }
+ 
++   // Luma start - Collect conversation configs from subfolders
++   @Override
++   public ArrayList<CommonConfig> getConfigs() {
++      ArrayList<CommonConfig> result = new ArrayList<>();
++      File rootFolder = new File(this.plugin.getDataFolder() + File.separator + this.folderName);
++      collectConfigs(rootFolder, this.folderName, result);
++      return result;
++   }
++
++   private void collectConfigs(File folder, String relativeFolderName, ArrayList<CommonConfig> result) {
++      File[] files = folder.listFiles();
++      if (files == null) return;
++      for (File file : files) {
++         if (file.isDirectory()) {
++            if (!LUMA$EXCLUDED_FOLDERS.contains(file.getName().toLowerCase())) {
++               collectConfigs(file, relativeFolderName + File.separator + file.getName(), result);
++            }
++         } else if (file.isFile() && file.getName().endsWith(".yml")) {
++            CommonConfig config = new CommonConfig(file.getName(), this.plugin, relativeFolderName, true);
++            config.registerConfig();
++            result.add(config);
++         }
++      }
++   }
++   // Luma end - Collect conversation configs from subfolders
++
+    @Override
+    public void createFiles() {
+       new CommonConfig("guard1.yml", this.plugin, this.folderName, false).registerConfig();
+@@ -136,11 +167,14 @@ public class ConversationConfigsManager extends DataFolderConfigManager {
                          var61 = var5.getStringList(var27 + "." + var57 + ".actions");
                       }
  
