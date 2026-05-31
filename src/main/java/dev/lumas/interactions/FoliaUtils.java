@@ -44,22 +44,28 @@ public class FoliaUtils {
         }
     }
 
-    public static void runOnEntityLater(Plugin plugin, Entity entity, Runnable task, long delayTicks) {
+    public static ScheduledTask runOnEntityLater(Plugin plugin, Entity entity, Runnable task, long delayTicks) {
+        long safeDelay = Math.max(delayTicks, 1);
+
         if (IS_FOLIA) {
-            entity.getScheduler().runDelayed(plugin, scheduledTask -> task.run(), null, delayTicks);
+            return entity.getScheduler().runDelayed(plugin, scheduledTask -> task.run(), null, safeDelay);
         } else {
-            Bukkit.getScheduler().runTaskLater(plugin, task, delayTicks);
+            int[] taskId = new int[1];
+            taskId[0] = Bukkit.getScheduler().runTaskLater(plugin, task, safeDelay).getTaskId();
+            return new BukkitScheduledTaskWrapper(taskId[0]);
         }
     }
 
     public static ScheduledTask runOnEntityTimer(Plugin plugin, Entity entity, Consumer<ScheduledTask> task, long delayTicks, long periodTicks) {
+        long safePeriod = periodTicks <= 0 ? 1 : periodTicks;
+
         if (IS_FOLIA) {
-            return entity.getScheduler().runAtFixedRate(plugin, task, null, delayTicks <= 0 ? 1 : delayTicks, periodTicks);
+            return entity.getScheduler().runAtFixedRate(plugin, task, null, delayTicks <= 0 ? 1 : delayTicks, safePeriod);
         } else {
             int[] taskId = new int[1];
             taskId[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
                 task.accept(new BukkitScheduledTaskWrapper(taskId[0]));
-            }, delayTicks, periodTicks).getTaskId();
+            }, delayTicks, safePeriod).getTaskId();
             return new BukkitScheduledTaskWrapper(taskId[0]);
         }
     }
@@ -89,13 +95,15 @@ public class FoliaUtils {
     }
 
     public static ScheduledTask runGlobalTimer(Plugin plugin, Consumer<ScheduledTask> task, long delayTicks, long periodTicks) {
+        long safePeriod = periodTicks <= 0 ? 1 : periodTicks;
+
         if (IS_FOLIA) {
-            return Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, task, delayTicks <= 0 ? 1 : delayTicks, periodTicks);
+            return Bukkit.getGlobalRegionScheduler().runAtFixedRate(plugin, task, delayTicks <= 0 ? 1 : delayTicks, safePeriod);
         } else {
             int[] taskId = new int[1];
             taskId[0] = Bukkit.getScheduler().runTaskTimer(plugin, () -> {
                 task.accept(new BukkitScheduledTaskWrapper(taskId[0]));
-            }, delayTicks, periodTicks).getTaskId();
+            }, delayTicks, safePeriod).getTaskId();
             return new BukkitScheduledTaskWrapper(taskId[0]);
         }
     }
@@ -118,15 +126,17 @@ public class FoliaUtils {
     }
 
     public static ScheduledTask runAsyncTimer(Plugin plugin, Consumer<ScheduledTask> task, long delayTicks, long periodTicks) {
+        long safePeriod = periodTicks <= 0 ? 1 : periodTicks;
+
         if (IS_FOLIA) {
-            long delayMs = delayTicks * 50L;
-            long periodMs = periodTicks * 50L;
+            long delayMs = Math.max(50L, delayTicks * 50L);
+            long periodMs = safePeriod * 50L;
             return Bukkit.getAsyncScheduler().runAtFixedRate(plugin, task, delayMs, periodMs, TimeUnit.MILLISECONDS);
         } else {
             int[] taskId = new int[1];
             taskId[0] = Bukkit.getScheduler().runTaskTimerAsynchronously(plugin, () -> {
                 task.accept(new BukkitScheduledTaskWrapper(taskId[0]));
-            }, delayTicks, periodTicks).getTaskId();
+            }, delayTicks, safePeriod).getTaskId();
             return new BukkitScheduledTaskWrapper(taskId[0]);
         }
     }
