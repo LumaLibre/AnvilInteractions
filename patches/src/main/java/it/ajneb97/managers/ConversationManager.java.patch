@@ -1,5 +1,5 @@
 diff --git a/src/main/java/it/ajneb97/managers/ConversationManager.java b/src/main/java/it/ajneb97/managers/ConversationManager.java
-index dd04f92..0791489 100644
+index dd04f92..b66d0de 100644
 --- a/src/main/java/it/ajneb97/managers/ConversationManager.java
 +++ b/src/main/java/it/ajneb97/managers/ConversationManager.java
 @@ -142,7 +142,7 @@ public class ConversationManager {
@@ -24,15 +24,18 @@ index dd04f92..0791489 100644
                       }
  
                       return false;
-@@ -257,7 +263,7 @@ public class ConversationManager {
+@@ -257,9 +263,9 @@ public class ConversationManager {
     }
  
     public void sendDialogueMessage(Player var1, Dialogue var2, FileConfiguration var3, MessagesManager var4, PlayerConversation var5) {
 -      ArrayList var6 = new ArrayList<>(var2.getText());
 +      ArrayList<String> var6 = new ArrayList<>(var2.getText()); // Luma - decompile
        MainConfigManager var7 = this.plugin.getConfigsManager().getMainConfigManager();
-       if (var7.isUseEmptySpaces()) {
+-      if (var7.isUseEmptySpaces()) {
++      if (var7.isUseEmptySpaces() && (!var6.isEmpty() || var2.isShowName())) { // Luma - Account for empty dialogue text
           var4.sendMessage(var1, " ", false);
+       }
+ 
 @@ -357,8 +363,8 @@ public class ConversationManager {
              String var15 = var5.getString("optionsFormat");
              String var16 = var5.getString("clickableOptionHover");

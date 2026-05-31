@@ -1,8 +1,8 @@
 diff --git a/src/main/java/it/ajneb97/tasks/DialogueTask.java b/src/main/java/it/ajneb97/tasks/DialogueTask.java
-index 21772c6..b008043 100644
+index 21772c6..85657a9 100644
 --- a/src/main/java/it/ajneb97/tasks/DialogueTask.java
 +++ b/src/main/java/it/ajneb97/tasks/DialogueTask.java
-@@ -7,28 +7,29 @@ import org.bukkit.scheduler.BukkitRunnable;
+@@ -7,28 +7,33 @@ import org.bukkit.scheduler.BukkitRunnable;
  public class DialogueTask {
     private Interactions plugin;
     private PlayerConversation playerConversation;
@@ -24,9 +24,13 @@ index 21772c6..b008043 100644
 -         }
 -      }).runTaskLater(this.plugin, var1 * 20L);
 +      // Luma start - Folia support
-+      dev.lumas.interactions.FoliaUtils.runOnEntityLater(this.plugin, this.playerConversation.getPlayer(), () -> {
-+         this.execute();
-+      }, var1 * 20L);
++      if (var1 <= 0) {
++         dev.lumas.interactions.FoliaUtils.runOnEntity(this.plugin, this.playerConversation.getPlayer(), this::execute);
++      } else {
++         this.luma$scheduledTask = dev.lumas.interactions.FoliaUtils.runOnEntityLater(this.plugin, this.playerConversation.getPlayer(), () -> {
++            this.execute();
++         }, var1 * 20L);
++      }
 +      // Luma end - Folia support
     }
  
